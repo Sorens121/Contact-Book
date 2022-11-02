@@ -1,0 +1,92 @@
+import User from '../models/users.js';
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await User.find();
+
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(404).json({ message: error.message});
+    }
+}
+
+export const getContactsById = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+}
+
+export const updateUser = async (req, res) => {
+    const {id: _id} = req.params;
+    const updates = req.body;
+    try {
+        const newData = await User.findByIdAndUpdate(
+            _id,
+            {$set: updates},
+            {new: true}
+        );
+        res.status(201).json(newData);
+    } catch (error) {
+        res.status(500).json("User not Found");
+    }
+}
+
+export const addNewToContactList = async (req, res) => {
+    const {id: _id} = req.params;
+    const contact = req.body;
+
+    try {
+        const newContact = await User.findByIdAndUpdate(
+            _id,
+            {$push: contact},
+            {new: true}
+        );
+        res.status(201).json(newContact);
+
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+}
+
+export const updateContactList = async (req, res) => {
+    const userId = req.params.user_id;
+    const contactId = req.params.contact_id;
+    const data = req.body;
+
+    try {
+        const newData = await User.updateOne({_id: userId},
+            {$set: {
+                'contactlist.$[c].countrycode': data.countrycode,
+                'contactlist.$[c].firstname': data.firstname,
+                "contactlist.$[c].lastname": data.lastname,
+                "contactlist.$[c].phonenumber": data.phonenumber,
+                "contactlist.$[c].email": data.email,
+                "contactlist.$[c].profilePic": data.profilePic,
+                "contactlist.$[c].isFavorite": data.isFavorite
+                }
+            },
+            {arrayFilters:[{'c._id': contactId}]});
+
+        res.status(201).json(newData);
+    } catch (error) {
+        res.status(500).json("No contact found");
+    }
+}
+
+export const deleteFromContactList = async (req, res) => {
+    const userId = req.params.user_id;
+    const contactId = req.params.contact_id;
+
+    try {
+        const del = await User.updateOne(
+            {"_id": userId},
+            {$pull: {contactlist: {_id: contactId }}});
+
+        res.status(201).json(del);
+    } catch (error) {
+        res.status(500).json("Contact not found");
+    }
+}

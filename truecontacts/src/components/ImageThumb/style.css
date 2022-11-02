@@ -1,0 +1,21 @@
+.slide-container {
+    display: flex;
+    align-items: center;
+    max-width: 57rem;
+    overflow-y: auto;
+    margin: auto;
+}
+
+.thumbnail {
+    background-color: grey;
+    color: white;
+
+    font-size: 28px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+    align-items: center;
+    cursor: default;
+    float: right;
+}

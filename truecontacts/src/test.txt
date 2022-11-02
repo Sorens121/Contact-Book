@@ -1,0 +1,50 @@
+   // setting image source for firebase
+    if(update.profilePic) {
+        const fileName = new Date().getTime().toString() + "_" + update.profilePic.name;
+        const uploadTask = storage.ref(`${FIREBASE_IMAGE_REF}/${id}/${fileName}`).put(update.profilePic);
+        uploadTask.on("state_changed", (snapshot) => {
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+            //console.log(progress);
+        },
+        async (error) => { console.log(error)},
+        async () => {
+            const url = await storage.ref(`${FIREBASE_IMAGE_REF}/${id}`)
+                .child(`${fileName}`).getDownloadURL();
+                updateToBackEnd(url);
+                //console.log(url);
+            }
+        );
+    } else {
+        updateToBackEnd();
+    }
+
+
+    {/* Show the contact list in card group */}
+{/* <Card.Group centered>
+    { currentContacts.length > 0 && 
+        currentContacts.map((contact) => (
+            <Card key={contact._id}>
+            <Card.Content>
+                <ImageThumb
+                circular
+                firstname={contact.firstname}
+                lastname={contact.lastname}
+                src={contact.profilePic}
+                style={{width: 73, height: 73}}
+                />
+
+                <Card.Header>{contact.firstname} {contact.lastname}</Card.Header>
+                <Card.Meta>{contact.email}</Card.Meta>
+                <Card.Meta>Country Code: {contact.countrycode}</Card.Meta>
+                <Card.Description>{contact.phonenumber}</Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+                <div className='ui two buttons'>
+                <Button basic color="green">Edit</Button>
+                <Button basic color="red">Delete</Button>
+                </div>
+            </Card.Content>
+            </Card>
+        ))
+    }
+</Card.Group> */}

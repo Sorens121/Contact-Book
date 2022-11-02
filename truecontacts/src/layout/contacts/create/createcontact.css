@@ -1,0 +1,24 @@
+.form-column {
+    max-width: 650px;
+    margin-top: 15px;
+}
+
+.contactpicture {
+    max-width: 175px;
+    max-height: 175px;
+    width: auto;
+    height: auto;
+    border: 1px solid gray;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-wrapper{
+    display: flex;
+}
