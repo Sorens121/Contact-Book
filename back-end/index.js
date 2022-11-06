@@ -11,7 +11,8 @@ import refreshRoute from './routes/refresh.js';
 import contactsRouter from './routes/api/contacts.js';
 import logoutRoute from './routes/logout.js';
 import adminRoute from './routes/api/admin.js';
-import { corsOptions } from './config/corsOptions.js'
+import profileRoute from './routes/api/profile.js';
+import { corsOptions } from './config/corsOptions.js';
 import { credentials } from './middleware/credentials.js';
 import verifyJWT from './middleware/verifyToken.js';
 
@@ -43,6 +44,7 @@ app.use(verifyJWT);
 app.use('/api/users', userRoute);
 app.use('/api/users', contactsRouter);
 app.use('/api/admin', adminRoute);
+app.use('/api/profile', profileRoute);
 
 const PORT = process.env.PORT || 5000;
 

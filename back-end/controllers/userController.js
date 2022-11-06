@@ -1,6 +1,6 @@
 import User from '../models/users.js';
 
-export const handleAllContacts = async (req, res) => {
+export const handleGetContactList = async (req, res) => {
     const id = req.params.id;
 
     try {
@@ -10,12 +10,6 @@ export const handleAllContacts = async (req, res) => {
         } else {
             const data ={
                 contactlist: foundUser.contactlist,
-                //id: foundUser._id,
-                // username: foundUser.username,
-                // firstname: foundUser.firstname,
-                // lastname: foundUser.lastname,
-                // profilepic: foundUser.profilepic,
-                // email: foundUser.email,
             }
             return res.status(200).json(data);
         }
