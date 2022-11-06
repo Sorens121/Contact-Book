@@ -24,5 +24,6 @@ export const regActions = ({
             type: REGISTER_ERROR,
             payload: error.response ? error.response.data : "CANNOT CONNECT"
         });
+        //console.log("error from api: ", error.response.data);
     })
 }

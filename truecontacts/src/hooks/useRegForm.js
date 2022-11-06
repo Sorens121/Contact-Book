@@ -8,8 +8,8 @@ const useRegForm = () => {
     const [fieldError, setFieldError] = useState({});
     const [isSubmit, setSubmit] = useState(false);
 
-    const {authDispatch, authState: {loading, error, user}} = useContext(GlobalContext);
-    //console.log(isAuthenticated, loading, error, user);
+    const { authState:{ auth: {loading, data, error}}, authDispatch} = useContext(GlobalContext);
+
     const history = useHistory();
 
     const onChange = (e, {name, value}) => {
@@ -43,10 +43,10 @@ const useRegForm = () => {
 
     //redirect after successful registration
     useEffect(() => {
-        if(user){
+        if(data){
             history.push('/login');
         }
-    },[user]);
+    },[data]);
     
 
     const validate = (values) => {
@@ -79,13 +79,21 @@ const useRegForm = () => {
 
     // if getting error from backend
     useEffect(()=> {
-        if(error === 409)
-            setFieldError({...fieldError, username: 'username taken'})
-        if(error === 500)
-            setFieldError({...fieldError, email: 'email already exits'})
+        if(error?.usernameerror){
+            setFieldError({...fieldError, "username": error.usernameerror})
+        }
 
-        return ()=> setSubmit(false)
+        if(error?.emailerror){
+            setFieldError({...fieldError, "email": error.emailerror})
+        }
+        
+        return ()=> {
+            setSubmit(false);
+            setFieldError({});
+        }
     }, [error]);
+
+    //console.log("errors", fieldError)
     
     return {form, onChange, formValidator, onSubmit, loading, fieldError};
 }

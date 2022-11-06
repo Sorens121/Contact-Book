@@ -3,6 +3,7 @@ import Header from '../../components/Header/Header';
 import { Button, Form, Grid, Header as SemanticHeader, Segment } from 'semantic-ui-react';
 
 const RegisterUI = ({form: {onChange, form, formValidator, onSubmit, loading, fieldError}}) => {
+  //console.log("Reg error: ", fieldError);
   return (
     <div>
         <Header />
