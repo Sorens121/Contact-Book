@@ -22,7 +22,7 @@ const uploadImage = async (image, id, callback) => {
     async () => {
         const url = await storage.ref(`${FIREBASE_IMAGE_REF}/${id}`)
             .child(`${filename}`).getDownloadURL();
-        console.log(url);
+        //console.log(url);
         callback(url);
     }); 
 }

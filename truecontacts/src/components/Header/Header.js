@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Icon, Image, Input, Menu } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import { Link, useHistory, useLocation } from 'react-router-dom';
@@ -7,13 +7,17 @@ import { GlobalContext } from '../../contexts/Provider';
 import isAuthenticated from '../../utils/isAuthenticated';
 import searchContacts from '../../contexts/actions/contacts/searchContacts';
 import ProfileModal from '../myModals/ProfileModal';
+import getProfile from '../../contexts/actions/profile/getProfile';
 
 
 const Header = () => {
+  const { contactsDispatch:dispatch } = useContext(GlobalContext);
+  const { profileState, profileDispatch } = useContext(GlobalContext);
+
   const [show, setShow] = useState(false);
   const { pathname } = useLocation();
   const history = useHistory();
-  const { contactsDispatch: dispatch } = useContext(GlobalContext);
+  let id = localStorage.getItem("user_id");
 
   const handleLogout = () => {
     logout(history)(dispatch);
@@ -24,6 +28,17 @@ const Header = () => {
 
     searchContacts(searchText)(dispatch);
   }
+
+  const getProfileData = () => {
+    getProfile({id})(profileDispatch);
+  }
+
+  useEffect(()=> {
+    if(id !== null){
+      id = id.toString();
+      getProfileData();
+    }
+  },[id]);
   
   
   return (
@@ -55,11 +70,13 @@ const Header = () => {
               icon
               onClick={() => {
                 setShow(true);
+                getProfileData();
               }}
             >
               <Icon name='user'/>
             </Button>
             <ProfileModal
+              state={profileState}
               show={show}
               onClose={() => setShow(false)}
             />

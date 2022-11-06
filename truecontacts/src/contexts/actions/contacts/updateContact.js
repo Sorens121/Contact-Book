@@ -29,7 +29,7 @@ const updateContact = ({id, contact_id, update, prevImgURL, isProfilePic}) => (d
 
     const getURL = (url) => {
         let newUpdate = {};
-        console.log(url);
+        //console.log(url);
         if(url) {
             newUpdate ={...update, profilePic: url}
             updateToBackEnd(newUpdate);
