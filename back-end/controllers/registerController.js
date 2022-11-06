@@ -16,17 +16,17 @@ export const handleNewUser = async (req, res) => {
     });
 
     //check for duplicate username
-    const duplicate = await User.findOne({username: newUser.username}).exec();
-    if(duplicate) {
-        //return res.status(409).json({'message': 'username taken'});
-        return res.sendStatus(409);
-    }
+    const duplicateUsername = await User.findOne({username: newUser.username}).exec();
+    const duplicateEmail = await User.findOne({email: newUser.email}).exec();
 
-    try {
+    if(duplicateUsername) {
+        //return res.sendStatus(409);
+        return res.status(409).json({'usernameerror': 'username taken'});
+    } else if(duplicateEmail){
+        //return res.sendStatus(500)
+        return res.status(409).json({'emailerror': 'email already registered'});
+    } else {
         await newUser.save();
-        res.status(201).json(`success: ${newUser.username} created!`);
-    } catch (error) {
-        //res.status(500).json({'message': 'email already registered'});
-        res.sendStatus(500);
+        return res.status(201).json(`success: ${newUser.username} created!`);
     }
 }
