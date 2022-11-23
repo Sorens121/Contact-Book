@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState } from "react";
 import { Button, Form, Modal, Image } from "semantic-ui-react";
-import { GlobalContext } from "../../contexts/Provider";
+
 import './style.css';
 
 const ProfileModal = ({
@@ -10,15 +10,16 @@ const ProfileModal = ({
         profile: {
             loading, data, error
         }
-    }}) => {
+    },updateProfile}) => {
     const imagePickRef = useRef(null);
     const [tempFile, setTempFile] = useState(null);
     const [update, setUpdate] = useState(null);
-    const [isProfile, setIsProfile] = useState(false);
+    const [isProfilePic, setIsProfilePic] = useState(false);
+    const [btnState, setBtnState] = useState(false);
     //console.log("profile", data, error);
 
     useEffect(() => {
-        setUpdate({...update, profilePic: data?.profilePic});
+        setUpdate({...update, profilepic: data?.profilepic});
 
         //clean up function
         return () => {
@@ -27,10 +28,10 @@ const ProfileModal = ({
             }
             setUpdate(null);
         }
-    }, [data]);
+    }, []);
 
     const chooseImage = () => {
-        if(!imagePickRef.current){
+        if(imagePickRef.current){
             imagePickRef.current.click();
         }
     }
@@ -41,25 +42,31 @@ const ProfileModal = ({
 
         if(fileURL){
             setTempFile(URL.createObjectURL(fileURL));
-            setUpdate({...update, profilePic: fileURL});
-            setIsProfile(true);
+            setUpdate({...update, profilepic: fileURL});
+            setIsProfilePic(true);
+            setBtnState(true);
         }
     }
 
     const handleChange = (e, {name, value}) => {
         setUpdate({...update,
             [name]: value
-        })
+        });
+        setBtnState(true);
     }
 
     const resetAll = () => {
         setTempFile(null);
         setUpdate(null);
-        setIsProfile(false);
+        setIsProfilePic(false);
+        setBtnState(false);
     }
 
-    const handleProfileUpdate = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("updates", update, data.profilepic, isProfilePic);
+        updateProfile(update, data.profilepic, isProfilePic);
+        onClose();
         resetAll();
     }
 
@@ -72,7 +79,7 @@ const ProfileModal = ({
                 <Modal.Content image>
                     <input onChange={onImageChange} ref={imagePickRef} type="file" hidden />
                     <div className="contact-picture" onClick={chooseImage}>
-                        {!tempFile ? <Image src={data?.profilePic} wrapped/> : <Image src={tempFile} wrapped />}
+                        {!tempFile ? <Image src={data?.profilepic} wrapped/> : <Image src={tempFile} wrapped />}
                     </div>
 
                     <Form unstackable style={{marginLeft: 30}}>
@@ -98,28 +105,6 @@ const ProfileModal = ({
                         </Form.Group>
 
                         <Form.Input
-                            label="Old Password"
-                            name="oldpassword"
-                            type="password"
-                            onChange={handleChange}
-                        />
-
-                        <Form.Group widths={1}>
-                            <Form.Input
-                                label="New Password"
-                                name="newpassword"
-                                type="password"
-                                onChange={handleChange}
-                            />
-                            <Form.Input
-                                label="Confirm Password"
-                                name="confirmpassword"
-                                type="password"
-                                onChange={handleChange}
-                            />
-                        </Form.Group>
-
-                        <Form.Input
                             label="Email"
                             name="email"
                             defaultValue={data?.email}
@@ -139,8 +124,9 @@ const ProfileModal = ({
                         content="Update"
                         labelPosition="right"
                         icon="checkmark"
-                        onClick={handleProfileUpdate}
+                        onClick={handleSubmit}
                         positive
+                        disabled={!btnState}
                     />
                 </Modal.Actions>
 

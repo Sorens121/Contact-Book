@@ -9,8 +9,6 @@ import UserLeaveConfirmation from './components/UserLeaveConfirmation';
 
 const RenderRoute = (route) => {
   const history = useHistory();
-  // const {authState: {isAuthenticated}} = useContext(GlobalContext);
-  // console.log('authState', isAuthenticated);
 
   if(route.needsAuth && !isAuthenticated()){
     history.push("/login");

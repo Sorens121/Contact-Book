@@ -22,10 +22,8 @@ const useRegForm = () => {
         setFieldError({});
         const validationError = validate(form);
         if(!isSubmit && validateForm(validationError)){
-            //console.log("valid")
             regActions(form)(authDispatch);
         } else {
-            //console.log("invalid")
             setFieldError(validationError);
         }
         setSubmit(true);

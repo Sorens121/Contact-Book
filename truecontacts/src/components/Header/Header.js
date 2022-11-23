@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Icon, Image, Input, Menu } from 'semantic-ui-react';
+import { Button, Dropdown, Icon, Image, Input, Menu } from 'semantic-ui-react';
 import logo from '../../assets/images/logo.svg';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import logout from '../../contexts/actions/auth/logout';
@@ -8,13 +8,18 @@ import isAuthenticated from '../../utils/isAuthenticated';
 import searchContacts from '../../contexts/actions/contacts/searchContacts';
 import ProfileModal from '../myModals/ProfileModal';
 import getProfile from '../../contexts/actions/profile/getProfile';
+import updateProfile from '../../contexts/actions/profile/updateProfile';
+import ChangePwd from '../myModals/ChangePwd';
+import changePassword from '../../contexts/actions/profile/updatepwd';
 
 
 const Header = () => {
   const { contactsDispatch:dispatch } = useContext(GlobalContext);
   const { profileState, profileDispatch } = useContext(GlobalContext);
 
-  const [show, setShow] = useState(false);
+  const [updateProfileModal, setUpdateProfileModal] = useState(false);
+  const [updatePasswordModal, setUpdatePasswordModal] = useState(false);
+  
   const { pathname } = useLocation();
   const history = useHistory();
   let id = localStorage.getItem("user_id");
@@ -33,12 +38,25 @@ const Header = () => {
     getProfile({id})(profileDispatch);
   }
 
-  useEffect(()=> {
-    if(id !== null){
+  const handleUpdateProfile = (update, prevImgURL, isProfilePic) => {
+    if(id != null){
       id = id.toString();
-      getProfileData();
+      updateProfile({id, update, prevImgURL, isProfilePic})(profileDispatch);
     }
-  },[id]);
+    console.log("from header", id, update, prevImgURL, isProfilePic);
+  }
+
+  // const handleUpdatePassword = (update) => {
+  //   console.log("change password", update);
+  //   changePassword({id, update})(profileDispatch);
+  // }
+
+  // useEffect(()=> {
+  //   if(id !== null){
+  //     id = id.toString();
+  //     getProfileData();
+  //   }
+  // },[id]);
   
   
   return (
@@ -66,22 +84,47 @@ const Header = () => {
       {
         isAuthenticated() && (
           <Menu.Item style={{marginBottom: 4, paddingRight: 10, paddingLeft: 10}}>
-            <Button 
-              icon
-              onClick={() => {
-                setShow(true);
-                getProfileData();
-              }}
+            <Dropdown 
+              text='profile'
+              icon='user' 
+              floating
+              button
+              labeled
+              className='icon' 
             >
-              <Icon name='user'/>
-            </Button>
+              <Dropdown.Menu>
+                <Dropdown.Item 
+                  onClick={() => {
+                    setUpdateProfileModal(true);
+                    getProfileData();
+                  }}
+                >Update Profile
+                </Dropdown.Item>
+
+                {/* <Dropdown.Item
+                  onClick={() => {
+                    setUpdatePasswordModal(true);
+                    getProfileData();
+                  }}
+                >Change Password
+                </Dropdown.Item> */}
+              </Dropdown.Menu>
+            </Dropdown>
+            
             <ProfileModal
               state={profileState}
-              show={show}
-              onClose={() => setShow(false)}
+              show={updateProfileModal}
+              onClose={() => setUpdateProfileModal(false)}
+              updateProfile={handleUpdateProfile}
             />
-          </Menu.Item>
 
+            {/* <ChangePwd
+              state={profileState}
+              show={updatePasswordModal}
+              onClose={() => setUpdatePasswordModal(false)}
+              updatePassword={handleUpdatePassword}
+            /> */}
+          </Menu.Item>
         )
       }
 
