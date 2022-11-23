@@ -12,6 +12,7 @@ export const handleGetProfile = async (req, res) => {
                 lastname: foundUser.lastname,
                 profilepic: foundUser.profilepic,
                 email: foundUser.email,
+                //id: foundUser._id,
             }
 
             return res.status(200).json(result);
@@ -34,7 +35,7 @@ export const handleUpdateProfile = async (req, res) => {
                         "username": updates.username,
                         "firstname": updates.firstname,
                         "lastname": updates.lastname,
-                        "profilePic": updates.firstname,
+                        "profilepic": updates.profilepic,
                         "email": updates.email,
                     }
                 }

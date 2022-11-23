@@ -17,7 +17,7 @@ export const handlePasswordUpdate = async (req, res) => {
 
         //match password
         if(matchPassword !== oldPass){
-            return res.status(403).json({'message': 'passwords donot match'});
+            return res.status(403).json({'passworderror': 'passwords donot match'});
         } else {
             //save new password
             const newpassword = CryptoJs.AES.encrypt(newPass, process.env.SECRET_KEY).toString();
@@ -29,6 +29,6 @@ export const handlePasswordUpdate = async (req, res) => {
             return res.status(201).json({'message': 'password changed successfully'});
         }
     } catch (error) {
-        return res.status(403).json({"message": 'user not found'});
+        return res.status(403).json({"usererror": 'user not found'});
     }
 }

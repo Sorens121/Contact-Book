@@ -21,6 +21,7 @@ export const handleLogin = async (req, res) => {
     //evaluate password if user is found
     const matchPassword = CryptoJs.AES.decrypt(foundUser.password, process.env.SECRET_KEY);
     const originalPassword = matchPassword.toString(CryptoJs.enc.Utf8);
+    //console.log(matchPassword);
 
     if(originalPassword !== password){
         return res.status(401).json({'message': 'Please check username and password'});
