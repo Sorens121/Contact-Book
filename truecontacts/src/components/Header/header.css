@@ -1,0 +1,17 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #000;
+}
+
+.left-h {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem;
+    flex: 3;
+}
+
+.right-h {
+    padding-top: 1rem;
+    flex:1;
+}

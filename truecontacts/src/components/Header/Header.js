@@ -9,16 +9,12 @@ import searchContacts from '../../contexts/actions/contacts/searchContacts';
 import ProfileModal from '../myModals/ProfileModal';
 import getProfile from '../../contexts/actions/profile/getProfile';
 import updateProfile from '../../contexts/actions/profile/updateProfile';
-import ChangePwd from '../myModals/ChangePwd';
-import changePassword from '../../contexts/actions/profile/updatepwd';
-
+//import './header.css';
 
 const Header = () => {
   const { contactsDispatch:dispatch } = useContext(GlobalContext);
   const { profileState, profileDispatch } = useContext(GlobalContext);
-
   const [updateProfileModal, setUpdateProfileModal] = useState(false);
-  const [updatePasswordModal, setUpdatePasswordModal] = useState(false);
   
   const { pathname } = useLocation();
   const history = useHistory();
@@ -45,19 +41,6 @@ const Header = () => {
     }
     console.log("from header", id, update, prevImgURL, isProfilePic);
   }
-
-  // const handleUpdatePassword = (update) => {
-  //   console.log("change password", update);
-  //   changePassword({id, update})(profileDispatch);
-  // }
-
-  // useEffect(()=> {
-  //   if(id !== null){
-  //     id = id.toString();
-  //     getProfileData();
-  //   }
-  // },[id]);
-  
   
   return (
     <Menu secondary pointing>
@@ -65,14 +48,15 @@ const Header = () => {
       <Menu.Item as={Link} to="/" style={{fontSize: 22}}>TrulyContacts</Menu.Item>
 
       {
-        isAuthenticated() && (<Menu.Item position='right'>
-          <Input style={{width: 350, marginBottom: 1}} placeholder="Search Contacts" onChange={onChange}/>
+        isAuthenticated() && (
+        <Menu.Item style={{width: 450, marginBottom: 5}}>
+          <Input placeholder="Search Contacts" onChange={onChange}/>
         </Menu.Item>)
       }
-      
+
       {
         isAuthenticated() && (
-          <Menu.Item position='right' style={{marginBottom: 4, paddingRight:10}}>
+          <Menu.Item position='right' style={{marginBottom: 5}}>
             <Button as={Link} to="/contacts/create" primary basic icon>
               <Icon name='add'></Icon>
               Create Contact
@@ -83,7 +67,7 @@ const Header = () => {
 
       {
         isAuthenticated() && (
-          <Menu.Item style={{marginBottom: 4, paddingRight: 10, paddingLeft: 10}}>
+          <Menu.Item style={{marginBottom: 5}}>
             <Dropdown 
               text='profile'
               icon='user' 
@@ -100,14 +84,6 @@ const Header = () => {
                   }}
                 >Update Profile
                 </Dropdown.Item>
-
-                {/* <Dropdown.Item
-                  onClick={() => {
-                    setUpdatePasswordModal(true);
-                    getProfileData();
-                  }}
-                >Change Password
-                </Dropdown.Item> */}
               </Dropdown.Menu>
             </Dropdown>
             
@@ -117,20 +93,13 @@ const Header = () => {
               onClose={() => setUpdateProfileModal(false)}
               updateProfile={handleUpdateProfile}
             />
-
-            {/* <ChangePwd
-              state={profileState}
-              show={updatePasswordModal}
-              onClose={() => setUpdatePasswordModal(false)}
-              updatePassword={handleUpdatePassword}
-            /> */}
           </Menu.Item>
         )
       }
 
       {
         isAuthenticated() && (
-          <Menu.Item style={{marginBottom: 4, paddingLeft: 10}}>
+          <Menu.Item style={{marginBottom: 5}}>
             {" "}
             <Button onClick={handleLogout} color="red" basic icon>
               <Icon name='log out'></Icon>
@@ -139,7 +108,7 @@ const Header = () => {
           </Menu.Item>
         )
       }
-    </Menu>
+    </Menu>  
   );
 }
 

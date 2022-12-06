@@ -1,11 +1,11 @@
 import { Route, Switch, useHistory } from 'react-router-dom';
-import './App.css';
 import routes from './routes/routes';
 import { GlobalProvider } from './contexts/Provider';
 import isAuthenticated from './utils/isAuthenticated';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Suspense, useState } from 'react';
 import UserLeaveConfirmation from './components/UserLeaveConfirmation';
+import './App.css';
 
 const RenderRoute = (route) => {
   const history = useHistory();

@@ -1,22 +1,32 @@
-import { useState } from "react";
-import { Button, Divider, Icon, List } from "semantic-ui-react";
+import { useMemo, useState } from "react";
+import { Button, Icon, List } from "semantic-ui-react";
 import ImageThumb from "../../../components/ImageThumb/imagethumb";
 import DeleteModal from "../../../components/myModals/DeleteModal";
 import NewForm from "../../../components/myModals/NewForm";
+import Pagination from "../../../components/Pagination/Pagination";
 import './style.css';
+
+let PageSize = 5;
 
 const ContactListView = ({contacts, deleteContact, addToFavorite, updateContact}) => {
     const [show, setShow] = useState(false);
     const [delModal, setDelModal] = useState(false);
     const [data, setData] = useState();
     const [contactID, setContactID] = useState();
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const currentPageData = useMemo(() => {
+        const firstPageIndex = (currentPage - 1) * PageSize;
+        const lastPageIndex = firstPageIndex + PageSize;
+
+        return contacts.slice(firstPageIndex, lastPageIndex);
+    }, [currentPage,contacts]);
 
     return (
         <div className="list-container">
             <List>
                 {
-                    contacts.length > 0 && 
-                    contacts.map((contact) => (
+                    currentPageData.map((contact) => (
                         <List.Item key={contact._id} style={{padding: 10}} disabled={contact.deleting}>
                             <List.Content floated="right" style={{marginTop: 19}}>
                                 <span>{contact.countrycode} {contact.phonenumber}</span>
@@ -78,6 +88,13 @@ const ContactListView = ({contacts, deleteContact, addToFavorite, updateContact}
                     ))
                 }
             </List>
+            <Pagination
+                className='pagination-bar'
+                currentPage={currentPage}
+                totalCount={contacts.length}
+                pageSize={PageSize}
+                onPageChange={(page) => setCurrentPage(page)}
+            />
         </div>
     )
 }

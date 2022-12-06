@@ -45,6 +45,8 @@ const updateContact = ({id, contact_id, update, prevImgURL, isProfilePic}) => (d
         } else {
             firebaseUpdateImage(id, null, update.profilePic, getURL)
         }
+    } else {
+        updateToBackEnd(update);
     }
 }
 

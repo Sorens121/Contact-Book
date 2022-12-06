@@ -5,3 +5,9 @@
 .grid-container {
     margin: 30px 83px;
 }
+
+.pagination-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

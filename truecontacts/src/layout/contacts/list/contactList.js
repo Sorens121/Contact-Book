@@ -29,7 +29,7 @@ const ContactListUI = ({
       <div>
         <AppHeader />
           <Container fluid>
-            <Header style={{marginLeft: '85px', marginTop: '10px'}}>Starred</Header>
+            <Header style={{marginLeft: '85px', marginTop: '10px', marginRight: 85}}>Starred</Header>
             <Favorites loading={loading} favorites={currentContacts.filter((item)=> item.isFavorite)}/>
 
             <div style={{display: 'flex', justifyContent: 'space-between'}}>
